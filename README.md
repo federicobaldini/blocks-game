@@ -21,6 +21,6 @@ blocks-game->$ cargo run
 ## Game preview 
 
 <p align="center">
-  <img src="https://github.com/federicobaldini/blocks-game/blob/main/game.gif" alt="blocks-game" />
+  <img src="https://github.com/federicobaldini/blocks-game/blob/master/game.gif" alt="blocks-game" />
 </p>
 
