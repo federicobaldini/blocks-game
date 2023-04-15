@@ -17,3 +17,10 @@ $ git clone https://github.com/federicobaldini/blocks-game
 $ cd blocks-game
 blocks-game->$ cargo run 
 ```
+
+## Game preview 
+
+<p align="center">
+  <img src="https://github.com/federicobaldini/blocks-game/blob/main/game.gif" alt="blocks-game" />
+</p>
+
