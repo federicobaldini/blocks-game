@@ -2,8 +2,6 @@
 
 A command-line application to play at Tetris, using Rust.
 
-Credit: https://twitter.com/BluefeverSoft
-
 ## Requirements
 
 To successful run this code, you need to have Rust and Cargo installed on your Machine.
