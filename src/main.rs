@@ -7,11 +7,11 @@ const HEIGHT: usize = 20;
 #[derive(Copy, Clone)]
 struct Cell {
   active: bool,
-  color: char,
+  color: u8,
 }
 
 impl Cell {
-  pub fn new(active: bool, color: char) -> Cell {
+  pub fn new(active: bool, color: u8) -> Cell {
     Cell { active, color }
   }
 
@@ -23,11 +23,11 @@ impl Cell {
     self.active = value;
   }
 
-  pub fn color(&self) -> char {
+  pub fn color(&self) -> u8 {
     self.color
   }
 
-  pub fn set_color(&mut self, value: char) {
+  pub fn set_color(&mut self, value: u8) {
     self.color = value;
   }
 }
@@ -35,11 +35,11 @@ impl Cell {
 #[derive(Clone)]
 struct Piece {
   blocks: Vec<Vec<bool>>,
-  color: char,
+  color: u8,
 }
 
 impl Piece {
-  fn new(blocks: Vec<Vec<bool>>, color: char) -> Piece {
+  fn new(blocks: Vec<Vec<bool>>, color: u8) -> Piece {
     Piece { blocks, color }
   }
 
@@ -59,46 +59,220 @@ impl Piece {
 }
 
 fn random_piece() -> Piece {
-  let pieces: [Piece; 7] = [
-    // ####
-    Piece::new(vec![vec![true, true, true, true]], '1'),
-    //  #
-    // ###
-    Piece::new(vec![vec![false, true, false], vec![true, true, true]], '2'),
-    // ##
-    // ##
-    Piece::new(vec![vec![true, true], vec![true, true]], '3'),
-    // ##
-    //  ##
-    Piece::new(vec![vec![true, true, false], vec![false, true, true]], '4'),
-    //  ##
-    // ##
-    Piece::new(vec![vec![false, true, true], vec![true, true, false]], '5'),
-    //   #
-    // ###
-    Piece::new(vec![vec![false, false, true], vec![true, true, true]], '6'),
-    // #
-    // ###
-    Piece::new(vec![vec![true, false, false], vec![true, true, true]], '7'),
+  let pieces: [Piece; 28] = [
+    /*
+     [#][#][#][#]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, true, true, true]], 1),
+    // Added one more to ensure equiprobability
+    Piece::new(vec![vec![true, true, true, true]], 1),
+    /*
+     [#][ ][ ][ ]
+     [#][ ][ ][ ]
+     [#][ ][ ][ ]
+     [#][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true], vec![true], vec![true], vec![true]], 1),
+    // Added one more to ensure equiprobability
+    Piece::new(vec![vec![true], vec![true], vec![true], vec![true]], 1),
+    /*
+     [ ][#][ ][ ]
+     [#][#][#][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![false, true, false], vec![true, true, true]], 2),
+    /*
+     [#][ ][ ][ ]
+     [#][#][ ][ ]
+     [#][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![true, false], vec![true, true], vec![true, false]],
+      2,
+    ),
+    /*
+     [#][#][#][ ]
+     [ ][#][ ][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, true, true], vec![false, true, false]], 2),
+    /*
+     [ ][#][ ][ ]
+     [#][#][ ][ ]
+     [ ][#][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![false, true], vec![true, true], vec![false, true]],
+      2,
+    ),
+    /*
+     [#][#][ ][ ]
+     [#][#][ ][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, true], vec![true, true]], 3),
+    // Added three more to ensure equiprobability
+    Piece::new(vec![vec![true, true], vec![true, true]], 3),
+    Piece::new(vec![vec![true, true], vec![true, true]], 3),
+    Piece::new(vec![vec![true, true], vec![true, true]], 3),
+    /*
+     [#][#][ ][ ]
+     [ ][#][#][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, true, false], vec![false, true, true]], 4),
+    // Added one more to ensure equiprobability
+    Piece::new(vec![vec![true, true, false], vec![false, true, true]], 4),
+    /*
+     [ ][#][ ][ ]
+     [#][#][ ][ ]
+     [#][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![false, true], vec![true, true], vec![true, false]],
+      4,
+    ),
+    // Added one more to ensure equiprobability
+    Piece::new(
+      vec![vec![false, true], vec![true, true], vec![true, false]],
+      4,
+    ),
+    /*
+     [ ][#][#][ ]
+     [#][#][ ][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![false, true, true], vec![true, true, false]], 5),
+    // Added one more to ensure equiprobability
+    Piece::new(vec![vec![false, true, true], vec![true, true, false]], 5),
+    /*
+     [#][ ][ ][ ]
+     [#][#][ ][ ]
+     [ ][#][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![true, false], vec![true, true], vec![false, true]],
+      5,
+    ),
+    // Added one more to ensure equiprobability
+    Piece::new(
+      vec![vec![true, false], vec![true, true], vec![false, true]],
+      5,
+    ),
+    /*
+     [ ][ ][#][ ]
+     [#][#][#][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![false, false, true], vec![true, true, true]], 6),
+    /*
+     [#][ ][ ][ ]
+     [#][ ][ ][ ]
+     [#][#][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![true, false], vec![true, false], vec![true, true]],
+      6,
+    ),
+    /*
+     [#][#][#][ ]
+     [#][ ][ ][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, true, true], vec![true, false, false]], 6),
+    /*
+     [#][#][ ][ ]
+     [ ][#][ ][ ]
+     [ ][#][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![true, true], vec![false, true], vec![false, true]],
+      6,
+    ),
+    /*
+     [#][ ][ ][ ]
+     [#][#][#][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, false, false], vec![true, true, true]], 7),
+    /*
+     [#][#][ ][ ]
+     [#][ ][ ][ ]
+     [#][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![true, true], vec![true, false], vec![true, false]],
+      7,
+    ),
+    /*
+     [#][#][#][ ]
+     [ ][ ][#][ ]
+     [ ][ ][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(vec![vec![true, true, true], vec![false, false, true]], 7),
+    /*
+     [ ][#][ ][ ]
+     [ ][#][ ][ ]
+     [#][#][ ][ ]
+     [ ][ ][ ][ ]
+    */
+    Piece::new(
+      vec![vec![false, true], vec![false, true], vec![true, true]],
+      7,
+    ),
   ];
   pieces.choose(&mut thread_rng()).unwrap().clone()
 }
 
-fn check_line_complete(board: &mut [[Cell; WIDTH]; HEIGHT], y: usize) -> bool {
-  for cell in board[y].iter() {
-    if !cell.active() {
-      return false;
+// returns the number of completed lines
+fn check_line_complete(board: &mut [[Cell; WIDTH]; HEIGHT]) -> u32 {
+  let mut active_cells_by_row_count: usize = 0;
+  let mut lines_completed_count: u32 = 0;
+  let mut row_to_check: usize = HEIGHT - 1;
+
+  while row_to_check > 0 {
+    for column in 0..WIDTH {
+      if board[row_to_check][column].active() {
+        active_cells_by_row_count += 1
+      }
     }
-  }
-  for i in (1..=y).rev() {
-    for j in 0..WIDTH {
-      board[i][j].set_active(board[i - 1][j].active());
+    if active_cells_by_row_count == WIDTH {
+      for row in (1..=row_to_check).rev() {
+        for column in 0..WIDTH {
+          board[row][column].set_active(board[row - 1][column].active());
+        }
+      }
+      for column in 0..WIDTH {
+        board[0][column].set_active(false);
+      }
+      lines_completed_count += 1;
+      row_to_check = HEIGHT - 1;
+    } else {
+      row_to_check -= 1
     }
+    active_cells_by_row_count = 0;
   }
-  for j in 0..WIDTH {
-    board[0][j].set_active(false);
-  }
-  true
+
+  lines_completed_count
 }
 
 fn clear_piece(board: &mut [[Cell; WIDTH]; HEIGHT], piece: &Piece, x: usize, y: usize) {
@@ -117,17 +291,27 @@ fn clear_piece(board: &mut [[Cell; WIDTH]; HEIGHT], piece: &Piece, x: usize, y: 
 
 fn print_board(board: &[[Cell; WIDTH]; HEIGHT], score: u32) {
   print!("\x1B[2J\x1B[1;1H"); // clear screen
-  println!("Score: {}", score);
+  println!("{:spaces$}Score: {}", "", score, spaces = (WIDTH * 2) + 6);
   for row in board.iter() {
+    // print left side
+    print!("||");
     for cell in row.iter() {
       if cell.active() {
-        print!("\x1b[3{}m#\x1b[0m", cell.color());
+        // print piece cell
+        print!("\x1B[{}m  \x1B[0m", 40 + cell.color());
       } else {
-        print!(".");
+        print!("  ");
       }
     }
+    // print right side
+    print!("||");
     println!();
   }
+  // print container bottom
+  for _ in 0..(WIDTH + 2) {
+    print!("‾‾");
+  }
+  println!();
 }
 
 fn get_input() -> String {
@@ -139,12 +323,12 @@ fn get_input() -> String {
 }
 
 fn start_game() {
-  let mut board: [[Cell; WIDTH]; HEIGHT] = [[Cell::new(false, '0'); WIDTH]; HEIGHT];
+  let mut board: [[Cell; WIDTH]; HEIGHT] = [[Cell::new(false, 0); WIDTH]; HEIGHT];
   let mut score: u32 = 0;
 
   loop {
     let mut piece: Piece = random_piece();
-    let mut x: usize = 3;
+    let mut x: usize = 4;
     let mut y: usize = 0;
     let mut x_previous_position: usize = 0;
     let mut y_previous_position: usize = 0;
@@ -168,12 +352,12 @@ fn start_game() {
         "w" => {
           clear_piece(&mut board, &piece, x_previous_position, y_previous_position);
           piece.rotate();
+          x = (x).min(WIDTH - piece.blocks()[0].len());
         }
         _ => {}
       }
 
       let mut piece_removed: bool = false;
-      let mut line_removed: bool = false;
 
       if y > 0 {
         // also clear the piece from its previous position when moving up
@@ -206,21 +390,22 @@ fn start_game() {
 
             board[y_actual_position][x_actual_position].set_active(true);
             board[y_actual_position][x_actual_position].set_color(piece.color);
-
-            if check_line_complete(&mut board, y_actual_position) {
-              line_removed = true;
-            }
           }
         }
       }
 
-      // Increase the score if a line is removed
-      if line_removed {
-        score += 1000;
-      }
-
       // Break out of the loop if the piece is removed (i.e. has reached the bottom of the game board)
       if piece_removed {
+        // Increase the score if a lines are removed
+        let lines_completed: u32 = check_line_complete(&mut board);
+        if lines_completed > 0 {
+          match lines_completed {
+            1 => score += 40,
+            2 => score += 100,
+            3 => score += 300,
+            _ => score += 1200,
+          }
+        }
         break;
       }
 
