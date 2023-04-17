@@ -340,18 +340,16 @@ fn start_game() {
       print_board(&board, score);
       let input: String = get_input();
 
+      // clear the piece from its previous position when moving up
+      clear_piece(&mut board, &piece, x_previous_position, y_previous_position);
+
       // Handle user input to move or rotate the piece
       match input.as_str() {
-        "a" => {
-          clear_piece(&mut board, &piece, x_previous_position, y_previous_position);
-          x = x.saturating_sub(1)
-        }
+        "a" => x = x.saturating_sub(1),
         "d" => {
-          clear_piece(&mut board, &piece, x_previous_position, y_previous_position);
           x = (x + 1).min(WIDTH - piece.blocks()[0].len());
         }
         "w" => {
-          clear_piece(&mut board, &piece, x_previous_position, y_previous_position);
           piece.rotate();
           x = (x).min(WIDTH - piece.blocks()[0].len());
         }
@@ -359,11 +357,6 @@ fn start_game() {
       }
 
       let mut piece_removed: bool = false;
-
-      if y > 0 {
-        // also clear the piece from its previous position when moving up
-        clear_piece(&mut board, &piece, x, y - 1);
-      }
 
       // update x_previous_position and y_previous_position after the movement or rotation
       x_previous_position = x;
