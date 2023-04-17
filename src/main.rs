@@ -334,11 +334,17 @@ fn start_game() {
     let mut x_previous_position: usize = 0;
     let mut y_previous_position: usize = 0;
     let mut game_over: bool = false;
+    let mut move_to_bottom: bool = false;
 
     while !game_over {
+      let mut input: String = String::new();
+
       // Print the game board and wait for user input
       print_board(&board, score);
-      let input: String = get_input();
+
+      if !move_to_bottom {
+        input = get_input();
+      }
 
       // clear the piece from its previous position when moving up
       clear_piece(&mut board, &piece, x_previous_position, y_previous_position);
@@ -352,6 +358,9 @@ fn start_game() {
         "w" => {
           piece.rotate();
           x = (x).min(WIDTH - piece.blocks()[0].len());
+        }
+        "s" => {
+          move_to_bottom = true;
         }
         _ => {}
       }
