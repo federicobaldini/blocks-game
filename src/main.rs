@@ -259,6 +259,7 @@ fn check_line_complete(board: &mut [[Cell; WIDTH]; HEIGHT]) -> u32 {
       for row in (1..=row_to_check).rev() {
         for column in 0..WIDTH {
           board[row][column].set_active(board[row - 1][column].active());
+          board[row][column].set_color(board[row - 1][column].color());
         }
       }
       for column in 0..WIDTH {
