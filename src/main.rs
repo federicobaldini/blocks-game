@@ -43,14 +43,27 @@ impl Piece {
     Piece { blocks, color }
   }
 
-  fn rotate(&mut self) {
+  fn rotate(&mut self, board: &[[Cell; WIDTH]; HEIGHT], x: usize, y: usize) {
     let mut new_blocks: Vec<Vec<bool>> = vec![vec![false; self.blocks.len()]; self.blocks[0].len()];
+    let mut collision_detected: bool = false;
     for i in 0..self.blocks.len() {
       for j in 0..self.blocks[0].len() {
         new_blocks[j][self.blocks.len() - i - 1] = self.blocks[i][j];
       }
     }
-    self.blocks = new_blocks;
+    for i in x..(x + new_blocks[0].len()) {
+      for j in y..(y + new_blocks.len()) {
+        if i < WIDTH && j < HEIGHT {
+          if board[j][i].active() {
+            collision_detected = true;
+            break;
+          }
+        }
+      }
+    }
+    if !collision_detected {
+      self.blocks = new_blocks;
+    }
   }
 
   pub fn blocks(&self) -> &Vec<Vec<bool>> {
@@ -356,7 +369,7 @@ fn start_game() {
           x = (x + 1).min(WIDTH - piece.blocks()[0].len());
         }
         "w" => {
-          piece.rotate();
+          piece.rotate(&board, x, y);
           x = (x).min(WIDTH - piece.blocks()[0].len());
         }
         "s" => {
@@ -391,8 +404,10 @@ fn start_game() {
               piece_removed = true;
             }
 
-            board[y_actual_position][x_actual_position].set_active(true);
-            board[y_actual_position][x_actual_position].set_color(piece.color);
+            if y_actual_position < HEIGHT && x_actual_position < WIDTH {
+              board[y_actual_position][x_actual_position].set_active(true);
+              board[y_actual_position][x_actual_position].set_color(piece.color);
+            }
           }
         }
       }
