@@ -18,6 +18,16 @@ $ cd blocks-game
 blocks-game->$ cargo run 
 ```
 
+## Controls
+
+- ```w + enter↲``` to rotate the block;
+- ```a + enter↲``` to move left the block;
+- ```d + enter↲``` to move right the block;
+- ```s + enter↲``` to move the block instantly to the bottom;
+- ```enter↲``` to move down the block;
+
+Actions ```w```, ```a``` and ```d``` in addition to their behaviour, will move the block down of one step.
+
 ## Game preview 
 
 <p align="center">
